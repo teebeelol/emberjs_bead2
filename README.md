@@ -80,12 +80,13 @@ Intuitív felhasználói felület, könnyű kezelhetőség
 # 2. Tervezés
 ## 2.1. Architektúra terv
 Az adott program JavaScript nyelven íródott, EmberJS keretrendszerben. A fejlesztés C9 IDE-n történt, amely egy ide mellett biztosított egy virtuális szervert is. A program használta C9 gépen futó  adatbázisokat, illetve REST-es szervert adatok tárolására, ahol több relációs táblában mentve adatokat, azt használunk fel. Ilyen táblák az ügyfelek táblája és a felhasználóknak köldütt üzenetek táblája.
-A végpontok kezelését Ember.JS keretrendszer működteti. A dinamikus oldal generálást HBS keretrendszer végzi el. A program fő, 'belépési pontja' a app.js, ahova az összes include történik, és többek között itt vannak definiálva a végpontoknál történő működések, ezek egyéb fájlokba való rendszerezésével persze. Ezen keretrendszerek által használt többi keretrendszer a node_modules-ban vannak jelen, az adott programon onnan használják ezeket. Ilyenek a jQuery, stb... A dizájnhoz használt keretrendszerek a Bottswatch és Bootstrap. 
+A végpontok kezelését Ember.JS keretrendszer működteti. A dinamikus oldal generálást HBS keretrendszer végzi el. A program fő, 'belépési pontja' a app.js, ahova az összes include történik. A végpontok kezelése a router.app fájlban van megoldva. Ezen keretrendszerek által használt többi keretrendszer a node_modules-ban vannak jelen, az adott programon onnan használják ezeket. Ilyenek a jQuery, stb... A dizájnhoz használt keretrendszerek a Bottswatch és Bootstrap. 
 A fejlesztés során az MVC tervezési mintát követtük, ennek alapján építettük fel a programot, jól elkülöníthető model-view-controller részekre daraboltuk fel.
 - **Model** a program logikai rétege, amely a megvalósításhoz szükséges információkat tartalmazza, itt valósul meg a megoldandó probléma logikailag. Itt találhatóak az adatbázisok, keretrendszerek, includok, és ezek együttműködésével a probléma megoldása.
 - **View** réteg az, amely a felhasználónak a vékony kliensre kirajzolja az általa megjeleníteni kíánt információt, illetve ezen keresztül figyeli a program a felhasználó kéréseit, és hajtja végre az utasításokat, így módosítja a belső müködést.,
 - **Controller** rétegbe érkeznek be a View által észlelt változások, kérések, és ez a modell közreműködésével együtt adja át ismét a kirajzoladnó tartalmat a view-nak
-A GPR mintát is követtük a program fejelsztésekor
+
+Az alkalmazás egy egyoldalas(SPA), azaz vastagkliens alkalmazás, melynél az első index oldalra lépéskor a megfelelő oldalak letöltődnek a kliens gyorsítótárába, majd a betöltött oldalak onnan jelennek meg további szerverhez való csatlakozás nélkül. Egyedül a REST-es szerveren lévő adatokhoz van csak HTTP kérések, melyek aszinkron módon történnek.
 
 
 ### **Komponens diagram**
@@ -104,10 +105,10 @@ Publikus:
 -  '/customer/list' :  GET metódus, REST-es szerver adatbázisban customer modellek alapján elmentett sorokat olvassa ki az adott végpont, majd egy html oldalra kirajzolva ket, ezt rendereli ki a böngészőre
 -  '/customer/new' :  GET metódus, az új adatbázis sorok felvételéhez szükséges oldal kirenderelése ebben a végpontban történik meg
 -  '/customer/new' :  POST metódus, az adott adatbázisba új customer modellű sorok hozzáadása ebben a végpontban történnek, ahol az információkat egy ellenörzés után a form-ból kiszedve következnek be.
--  '/customer/:id' :  GET metódus, az adott bejegyzése nyomva az adott :id alapján kikeresve az adatbázisból a megfelelő sort, az adott sor attribútumait jeleníti meg az oldalon az adott végpont, hozáá még a customerticket modellű adatbázisból a megfelelő sorokat is kirenderelve, ahol a username megegyezik.
--  '/customer/:id' :  POST metódus, ezen égponton lehetőság van újabb sort felvenni a customerticket model által definiált adatbázisba. Az adatokat a HTML oldalon megjelenő form-ból nyerjük, ahol egy adat ellenőrzés után a :id-hez tartozó customer username-ével egyetemben egy új sort hozunk létre customerticketben
--  '/customer/delete/:id' : GET metódus, melynek lefutása elött list_delete.js fájl fut le, jQuery könyvtár által meghatározott függvények segítségével. Ebben a végpontban Az adott id-jű customer törlődik az adatbázisból, és vele együtt az összes hozzá tartozó sor a customerticket-ből is
--  '/customer/edit/:id' :  GET metódus, lehetőség van ebben a végpontban sorok adatainak módosítására
+-  '/customer/view' :  GET metódus, az adott bejegyzése nyomva az adott :id alapján kikeresve az adatbázisból a megfelelő sort, az adott sor attribútumait jeleníti meg az oldalon az adott végpont, hozáá még a customerticket modellű adatbázisból a megfelelő sorokat is kirenderelve, ahol a username megegyezik.
+-  '/customer/view' :  POST metódus, ezen égponton lehetőság van újabb sort felvenni a customerticket model által definiált adatbázisba. Az adatokat a HTML oldalon megjelenő form-ból nyerjük, ahol egy adat ellenőrzés után a :id-hez tartozó customer username-ével egyetemben egy új sort hozunk létre customerticketben
+-  '/customer/edit' : GET metódus, melynek lefutása elött list_delete.js fájl fut le, jQuery könyvtár által meghatározott függvények segítségével. Ebben a végpontban Az adott id-jű customer törlődik az adatbázisból, és vele együtt az összes hozzá tartozó sor a customerticket-ből is
+-  '/customer/edit' :  GET metódus, lehetőség van ebben a végpontban sorok adatainak módosítására
 
 ## 2.2. Felhasználófelület-modell
 
@@ -147,28 +148,8 @@ Az program egyes részeinek tesztelésére a ZOMBIE.JS keretrendszert használtu
 A funkcionális tesztelésnek a lényege, hogy a tesztelés annyira bonyolult, annyira megy bele, pont amennyire mi is használnánk az oldalt.
 
 ## 3.2 Egységtesztek és Funkcionális tesztek
-Az általam tesztelt adatmodellek között van a users adatmodell, nyilván az adatmodellek tesztelése nagyon fontos, az oldal dinamikusan generált részének túlnyomó többsége adatbázisból lekérdezedd információk alapján generálódik, így ennek a tesztelése nélkülözhetetlen.
-Az általam tesztelt usermodell, és arra kapott eredmények:
-- **Fájl**: index.test.js; user.test.js
-- **Eredmény**:
-
-- User visits index page
-  -  ✓ should be successful
-  -  ✓ should see welcome page
-  -  ✓ should see the date
-
-- UserModel
-  - ✓ should be able to create a user (567ms)
-  - ✓ should be able to find a user (604ms)
-    - #validPassword
-      - ✓ should return true with right password (586ms)
-      - should return false with wrong password (578ms)
-- 7 passing (3s)
-
-A tesztet az **npm test** parancsal lehetett végrehajtani, amely az adott projekten belűl található összes *.test.js fájt lefuttatja, és kilistázza az esetleges hibákat, ha voltak. 
 
 ## 3.3 Tesztesetek felsorolása: milyen eseteket próbált végig a hallgató
-ZOMBIE.JS keretrendszer használatával egységteszteket és funkcionális teszteket hajtottam végre annak érdekében, hogy a programom megfelelően működjön, elkerülve az esetleges kellemetlenségeket az éles használat közbeni hibák miatt. 
 
 # 5. Felhasználói dokumentáció
 ## 5.1 A futtatáshoz ajánlott hardver-, szoftver konfiguráció
@@ -185,4 +166,4 @@ Ami a programot használó felhasználókat illeti, egy olyan gép szükséges, 
 Egy linux alapú szervergépen a git bash telepítése esetén az adott projekt saját gépre való klónozása esetén a program egyből kivállóan működésre képes. Telepített NPM esetén a program működéséhez nélkülözhetetlen függőségek a package.json miatt egy **nvm install** parancs esetén azonnal telepűlni fognak, így a program indítása egy **node server.js** parancs megadásával egyből el is fog indulni. A git, NPM és Node.js letöltése és feltelepítése azonban nélkülözhetetlen, ezen programokkal intézhető el a program futtatása. Ezen programok ebszerzésére van sok guide, nézd azt.
 
 ## 5.3 A program használata
-A program a cég munkatársainak lett fejlesztve, biztosítva a cég ügyfeleinek egy megfelelő, köünnyen érthető, egyszerűen kezelhető felületet biztosítva. A kedvenc kis böngészőnkbe az URL cím írása után az index oldallal találkozunk, ahol egy bejelentkezés eseén már nyomban el is kezdhetjük a munkát a programunkkal. Amint azonban ha nem vagyunk regisztrálva, a belépő - login - oldalnál a regisztráció gomb segítségével képesek leszünk regisztrálni, nyilván ha az általunk megadott adatok megfelelnek az űrlapon előjelzett mezőkben megadott tulajdonságokinak. Login, illetve regisztráció után a programunk a ügyfeleket listázó oldalra fog minket irányítani, ahol lehetőségünk van új ügyfelek felvételére, meglévők módosítására, illetve törlésére. Ez egy általános áttekintő listázó oldal, innen alap információkat megkapunk, melyek lehetnek, hogy az adott ügyfél aktiv-e, meddig aktív, illetve mi a neve, és ehez hasonlók. Bővebb listázáshoz lehetőségünk van ügyfelek nevére kattíntani, így egyéb infórmációk mellett megtekínthetjük, hogy az adott ügyfélnek az egyes munkatársak megy levelekkel, illetve üzenetekkel gazdagították az adott ügyfél SMS ládáját. Nyilván mint amott mondottamott, a bővebb listázásnál, lehetőség van levél küldésére, ezek az üzenetek az ügyfél által megadott telefonszámra fognak érkezni. Új üzenet küldése mellett lehetőség van a már meglévőket megnézni, hogy mely üzeneteket kapta meg a ügyfél. Mindezek mellett lehetőség van munkánk végzése után kijelentkezni az oldalról.
+A program a cég munkatársainak lett fejlesztve, biztosítva a cég ügyfeleinek egy megfelelő, köünnyen érthető, egyszerűen kezelhető felületet biztosítva. A kedvenc kis böngészőnkbe az URL cím írása után az index oldallal találkozunk, ahol el is kezdhetjük a munkát a programunkkal. Az ügyfeleket listázó oldalra fog minket irányítani, ahol lehetőségünk van új ügyfelek felvételére, meglévők módosítására, illetve törlésére. Ez egy általános áttekintő listázó oldal, innen alap információkat megkapunk, melyek lehetnek, hogy az adott ügyfél aktiv-e, meddig aktív, illetve mi a neve, és ehez hasonlók. Bővebb listázáshoz lehetőségünk van ügyfelek nevére kattíntani, így egyéb infórmációk mellett megtekínthetjük, hogy az adott ügyfélnek az egyes munkatársak megy levelekkel, illetve üzenetekkel gazdagították az adott ügyfél SMS ládáját. Nyilván mint amott mondottamott, a bővebb listázásnál, lehetőség van levél küldésére, ezek az üzenetek az ügyfél által megadott telefonszámra fognak érkezni. Új üzenet küldése mellett lehetőség van a már meglévőket megnézni, hogy mely üzeneteket kapta meg a ügyfél.
