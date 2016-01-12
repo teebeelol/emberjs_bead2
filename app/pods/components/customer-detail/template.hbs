@@ -1,0 +1,48 @@
+<dl class="dl-horizontal">
+  <dt>id</dt>
+  <dd>{{data.id}}</dd>
+  <dt>Felhasználónév</dt>
+  <dd id="username" name="username">{{data.username}}</dd>
+  <dt>Név</dt>
+  <dd>{{data.name}}</dd>
+  <dt>Érvényesség</dt>
+  <dd>{{data.validity}}</dd>
+  <dt>Telefonszám</dt>
+  <dd>{{data.phonenumber}}</dd>
+</dl>
+
+<table class="table table-striped table-hover" id="customertickets">
+    <thead>
+        <tr>
+            <th>Üzenetek</th>
+        </tr>   
+    </thead>
+    <tbody>
+        {{log messages}}
+        {{log data}}
+        {{log data.messages}}
+        {{#each messages}}
+        <tr>
+            <td>{{this}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<form class="form-horizontal" method="post">
+    <fieldset>
+            <div class="form-group">
+            <label for="ticket" class="col-lg-2 control-label">Üzenet</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="message" name="message" placeholder="Üzenet küldése az adott ügyfélnek." type="text" value="{{data.message}}">
+            </div>
+            
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button {{action "submit"}} class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form> 

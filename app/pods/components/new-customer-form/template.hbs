@@ -1,0 +1,38 @@
+<form class="form-horizontal" method="post">
+    <fieldset>
+        <div class="form-group {{if errors.username "has-error"}}">
+            <label for="username" class="col-lg-2 control-label">Felhasználónév</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="username" name="username" placeholder="ASDASADER" type="text" value="{{data.username}}">
+                <span class="help-block">{{errors.username}}</span>
+            </div>
+        </div>
+        <div class="form-group {{if errors.name "has-error"}}">
+            <label for="name" class="col-lg-2 control-label">Név</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="name" name="name" placeholder="Asd Asader" type="text" value="{{data.name}}">
+                <span class="help-block">{{errors.name}}</span>
+            </div>
+        </div>
+        <div class="form-group {{if errors.validity "has-error"}}">
+            <label for="validity" class="col-lg-2 control-label">Érvényesség</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="validity" name="validity" placeholder="1976.01.01" type="text" value="{{data.validity}}">
+                <span class="help-block">{{errors.validity}}</span>
+            </div>
+        </div>
+        <div class="form-group {{if errors.phonenumber "has-error"}}">
+            <label for="phonenumber" class="col-lg-2 control-label">Telefonszám</label>
+            <div class="col-lg-10">
+                <input class="form-control" id="phonenumber" name="phonenumber" placeholder="06-1-323674365243756" type="text" value="{{data.phonenumber}}">
+                <span class="help-block">{{errors.phonenumber}}</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancel</button>
+                <button {{action "submit"}} class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </fieldset>
+</form>        
