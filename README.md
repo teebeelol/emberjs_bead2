@@ -2,7 +2,7 @@
 # 1. Követelmény feltárása
 ### 1.1. Célkitűzés, projektindító dokumentum
 A cél az alábbi alkalmazással a KAPPAKEEPONÉGYHEAD Zrt. Telefonközpont cégnek egy ügyfélkezelő, és ügyfélnyilvántartó rendszer létrehozása volt, mely lehetővé teszi a cégnek az ügyfeleit kezelni, karbantartani, meneddzselni és az ügyfeleknek üzeneteket küldeni mind ezt egy egyszerű, de hatásos kezelőfelületen keresztül. 
-
+ f
 A cégnek lehetősége van az ügyfelek kezelésére, információik megtekintésére, és érvényességük megtekintésére is, ügyfeleknek írt üzenetek megtekíntésére, valamint ilyen üzenetek küldésére, mely csak az adott ügyfeleknek szól. A rendszer fő profilja, hogy meg lehessen tekínteni, hogy mely ügyfelek fizetésis tátusza járt le, illetve lehetőség van ezen ügyfeleket tájékoztatni eme elmaradásokrók. A pogram fejlesztésénél fő szempont volt az egyszerű, lényegretörő, de könnyen kezelhető rendszer kiépítése, mely előzőkhöz társul még a robosztusság is.
 
 A rendszerben lehetőség van új ügyfelek felvételére, már meglévő ügyfelek törlésére, illetve ilyen meglévő ügyfelek szerkesztésére. Továbbá lehetőség van az adott ügyfeleknek információkat, fizetési felszólításokat egy saját levelező rendszerrel leveleket küldeni, melyet az ügyfelek SMS formában kapnak meg. Az alkalmazottak, akik a rendszert igénybe veszik, internet böngészőn keresztül lesznek majd képesek meneddzselni az ügyfeleket, ezáltal biztosítani a cég gördülékeny, megfelelő munkamenetét. 
